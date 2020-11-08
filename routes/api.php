@@ -27,37 +27,3 @@ Route::middleware('auth:api')
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('user', 'UserController@getAuthenticatedUser');
 });
-
-Route::get('users', 'UserController@index');
-
-/** Jobs */
-
-Route::get('jobs', 'JobsController@index');
-Route::get('jobs/{id}', 'JobsController@details');
-Route::post('jobs', 'JobsController@create');
-Route::put('jobs/{id}', 'JobsController@update');
-Route::delete('jobs/{id}', 'JobsController@delete');
-
-Route::get('jobs', function(){
-	return Job::all();
-})->middleware('jwt.verify');
-
-Route::get('jobs/{Id}', function($Id){
-	return Job::find($Id);
-})->middleware('jwt.verify');
-
-Route::post('jobs', function(Request $request){
-	return Job::create($request->all());
-})->middleware('jwt.verify');
-
-Route::put('jobs/{Id}', function(Request $request, $Id) {
-    $Job = Job::findOrFail($Id);
-    $Job->update($request->all());
-
-    return $Job;
-})->middleware('jwt.verify');
-
-Route::delete('jobs/{Id}', function($Id){
-	Job :: find($Id)->delete();
-	return 204;
-})->middleware('jwt.verify');

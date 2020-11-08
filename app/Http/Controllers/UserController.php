@@ -21,7 +21,7 @@
         }
 
         public function authenticate(Request $request) {
-            $credentials = $request->only('email', 'password');
+            $credentials = $request->only('username', 'password');
 
             try {
                 if (! $token = JWTAuth::attempt($credentials)) {
