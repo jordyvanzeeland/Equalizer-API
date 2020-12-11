@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 Use App\Job;
+Use App\Project;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,8 @@ Use App\Job;
 Route::post('register', 'UserController@register');
 Route::post('login', 'UserController@authenticate');
 Route::get('open', 'DataController@open');
+
+Route::get('projects', 'ProjectsController@index');
 
 Route::middleware('auth:api')
 
