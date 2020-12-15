@@ -2,14 +2,10 @@
 
     namespace App;
 
-    use Illuminate\Notifications\Notifiable;
-    use Illuminate\Foundation\Auth\User as Authenticatable;
-    use Tymon\JWTAuth\Contracts\JWTSubject;
+    use Illuminate\Database\Eloquent\Model;
 
-    class System extends Authenticatable implements JWTSubject
+    class System extends Model
     {
-        use Notifiable;
-
         /**
          * The attributes that are mass assignable.
          *
@@ -18,4 +14,6 @@
         protected $fillable = [
             'system_name', 'system_url'
         ];
+
+        protected $table = 'ldeq_systems';
     }

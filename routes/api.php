@@ -20,9 +20,11 @@ Route::post('register', 'UserController@register');
 Route::post('login', 'UserController@authenticate');
 Route::get('open', 'DataController@open');
 
-Route::get('projects', 'ProjectsController@index');
+Route::get('projects', 'ProjectsController@index')->middleware('jwt.verify');
+Route::get('projects/{id}', 'ProjectsController@details')->middleware('jwt.verify');
 
-Route::get('systems', 'SystemsController@index');
+Route::get('systems', 'SystemsController@index')->middleware('jwt.verify');
+Route::get('systems/{id}', 'SystemsController@details')->middleware('jwt.verify');
 
 Route::middleware('auth:api')
 
