@@ -21,7 +21,10 @@ Route::post('login', 'UserController@authenticate');
 Route::get('open', 'DataController@open');
 
 Route::get('projects', 'ProjectsController@index')->middleware('jwt.verify');
-Route::get('projects/{id}', 'ProjectsController@details')->middleware('jwt.verify');
+Route::get('project/{id}', 'ProjectsController@details')->middleware('jwt.verify');
+Route::post('projects/new', 'ProjectsController@create')->middleware('jwt.verify');
+Route::delete('project/{id}/delete', 'ProjectsController@delete')->middleware('jwt.verify');
+Route::put('project/{id}/update', 'ProjectsController@update')->middleware('jwt.verify');
 
 Route::get('systems', 'SystemsController@index')->middleware('jwt.verify');
 Route::get('systems/{id}', 'SystemsController@details')->middleware('jwt.verify');
