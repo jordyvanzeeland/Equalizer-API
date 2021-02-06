@@ -27,7 +27,10 @@ Route::delete('project/{id}/delete', 'ProjectsController@delete')->middleware('j
 Route::put('project/{id}/update', 'ProjectsController@update')->middleware('jwt.verify');
 
 Route::get('systems', 'SystemsController@index')->middleware('jwt.verify');
-Route::get('systems/{id}', 'SystemsController@details')->middleware('jwt.verify');
+Route::get('system/{id}', 'SystemsController@details')->middleware('jwt.verify');
+Route::post('systems/new', 'SystemsController@create')->middleware('jwt.verify');
+Route::delete('system/{id}/delete', 'SystemsController@delete')->middleware('jwt.verify');
+Route::put('system/{id}/update', 'SystemsController@update')->middleware('jwt.verify');
 
 Route::middleware('auth:api')
 

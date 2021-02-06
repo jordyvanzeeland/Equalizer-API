@@ -31,7 +31,7 @@ class ProjectsController extends Controller
 
     public function index(){
 
-    	$Projects = DB::table('ldeq_projects')->get();
+		$Projects = DB::table('ldeq_projects')->get();
     	
     	return $Projects;	
 
@@ -41,31 +41,30 @@ class ProjectsController extends Controller
 
 		$Project = Project::find($Id);
 
-		$Project['FtpPass'] = $this->encrypt_decrypt('decrypt', $Project['FtpPass']);
-        $Project['DbPass'] = $this->encrypt_decrypt('decrypt', $Project['DbPass']);
-        $Project['WpPass'] = $this->encrypt_decrypt('decrypt', $Project['WpPass']);
+		$ProjectPasswords = DB::table('ldeq_passwords')
+					->select('ldeq_passwords.type', 'ldeq_types.type', 'ldeq_passwords.host', 'ldeq_passwords.username', 'ldeq_passwords.password')
+					->join('ldeq_types', 'ldeq_passwords.type', '=', 'ldeq_types.id')
+					->where('ldeq_passwords.projectid', $Id)
+					->get();
 
-    	return $Project;
+		foreach($ProjectPasswords as $password){
+			$password->password = $this->encrypt_decrypt('decrypt', $password->password);
+		}
+		
+
+    	return ['data' => $Project, 'passwords' => $ProjectPasswords];
 
     }
 
     public function create(Request $Request){
 
-		$EncryptedFtpPass = $this->encrypt_decrypt('encrypt', $Request->FtpPass);
-		$EncryptedDbPass = $this->encrypt_decrypt('encrypt', $Request->DbPass);
-		$EncryptedWpPass = $this->encrypt_decrypt('encrypt', $Request->WpPass);
+		// $EncryptedFtpPass = $this->encrypt_decrypt('encrypt', $Request->FtpPass);
+		// $EncryptedDbPass = $this->encrypt_decrypt('encrypt', $Request->DbPass);
+		// $EncryptedWpPass = $this->encrypt_decrypt('encrypt', $Request->WpPass);
 
 		$Project = DB::table('ldeq_projects')->insert([
-			'ProjectName' => $Request->ProjectName,
-			'ProjectUrl' => $Request->ProjectUrl,
-			'FtpHost' => $Request->FtpHost,
-			'FtpUser' => $Request->FtpUser,
-			'FtpPass' => $EncryptedFtpPass,
-			'DbHost' => $Request->DbHost,
-			'DbUser' => $Request->DbUser,
-			'DbPass' => $EncryptedDbPass,
-			'WpUser' => $Request->WpUser,
-			'WpPass' => $EncryptedWpPass
+			'projectname' => $Request->header('projectname'),
+			'projecturl' => $Request->header('projecturl'),
 		]);
 
     	return response()->json($Project, 201);
