@@ -11,12 +11,10 @@ class ProjectsController extends Controller
 {
 
 	public function encrypt_decrypt($action, $string) {
-
 		$output = false;
 		$encrypt_method = "AES-256-CBC";
 		$secret_key = 'This is my secret key';
 		$secret_iv = 'This is my secret iv';
-		// hash
 		$key = hash('sha256', $secret_key);
 
 		$iv = substr(hash('sha256', $secret_iv), 0, 16);
