@@ -41,7 +41,10 @@ class ProjectsController extends Controller
 		$Project->FtpPass = $this->encrypt_decrypt('decrypt', $Project->FtpPass);
 		$Project->DbPass = $this->encrypt_decrypt('decrypt', $Project->DbPass);
 		$Project->WpPass = $this->encrypt_decrypt('decrypt', $Project->WpPass);
-    	return ['data' => $Project];
+
+		$ProjectNotes = DB::table('ldeq_notes')->where('projectid', $Id)->get();
+
+    	return ['data' => $Project, 'notes' => $ProjectNotes];
 
     }
 
@@ -62,6 +65,18 @@ class ProjectsController extends Controller
 			'DbPass' => $EncryptedDbPass,
 			'WpUser' => $Request->header('projectwpuser'),
 			'WpPass' => $EncryptedWpPass
+		]);
+
+    	return response()->json($Project, 201);
+
+    }
+
+	public function createNote(Request $Request){
+
+		$Project = DB::table('ldeq_notes')->insert([
+			'projectid' => $Request->header('projectid'),
+			'content' => $Request->header('content'),
+			'datecreated' => $Request->header('datecreated'),
 		]);
 
     	return response()->json($Project, 201);
@@ -96,6 +111,14 @@ class ProjectsController extends Controller
     public function delete(Request $Request, $Id){
 		
 		$Project = DB::table('ldeq_projects')->where('id', $Id)->delete();
+
+    	return response()->json("OK");
+
+    }
+
+	public function deleteNote(Request $Request, $Id, $noteid){
+		
+		$Project = DB::table('ldeq_notes')->where('id', $noteid)->delete();
 
     	return response()->json("OK");
 

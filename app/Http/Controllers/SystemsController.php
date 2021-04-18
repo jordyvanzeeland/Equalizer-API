@@ -40,7 +40,9 @@ class SystemsController extends Controller
     	$System = System::find($Id);
 		$System->system_password = $this->encrypt_decrypt('decrypt', $System->system_password);
 
-    	return $System;
+		$SystemNotes = DB::table('ldeq_notes')->where('systemid', $Id)->get();
+
+    	return ['data' => $System, 'notes' => $SystemNotes];
 
     }
 
@@ -53,6 +55,18 @@ class SystemsController extends Controller
 			'system_url' => $Request->header('systemurl'),
 			'system_username' => $Request->header('systemuser'),
 			'system_password' => $EncryptedPass
+		]);
+
+    	return response()->json($System, 201);
+
+    }
+
+	public function createNote(Request $Request){
+
+		$System = DB::table('ldeq_notes')->insert([
+			'systemid' => $Request->header('systemid'),
+			'content' => $Request->header('content'),
+			'datecreated' => $Request->header('datecreated'),
 		]);
 
     	return response()->json($System, 201);
@@ -76,7 +90,15 @@ class SystemsController extends Controller
 
     public function delete(Request $Request, $Id){
 
-    	$Project = DB::table('ldeq_systems')->where('id', $Id)->delete();
+    	$System = DB::table('ldeq_systems')->where('id', $Id)->delete();
+
+    	return response()->json("OK");
+
+    }
+
+	public function deleteNote(Request $Request, $Id, $noteid){
+		
+		$System = DB::table('ldeq_notes')->where('id', $noteid)->delete();
 
     	return response()->json("OK");
 

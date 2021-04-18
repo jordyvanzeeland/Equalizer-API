@@ -23,13 +23,17 @@ Route::get('open', 'DataController@open');
 Route::get('projects', 'ProjectsController@index')->middleware('jwt.verify');
 Route::get('project/{id}', 'ProjectsController@details')->middleware('jwt.verify');
 Route::post('projects/new', 'ProjectsController@create')->middleware('jwt.verify');
+Route::post('project/{id}/note/new', 'ProjectsController@createNote')->middleware('jwt.verify');
 Route::delete('project/{id}/delete', 'ProjectsController@delete')->middleware('jwt.verify');
+Route::delete('project/{id}/note/{noteid}/delete', 'ProjectsController@deleteNote')->middleware('jwt.verify');
 Route::put('project/{id}/update', 'ProjectsController@update')->middleware('jwt.verify');
 
 Route::get('systems', 'SystemsController@index')->middleware('jwt.verify');
 Route::get('system/{id}', 'SystemsController@details')->middleware('jwt.verify');
+Route::post('system/{id}/note/new', 'SystemsController@createNote')->middleware('jwt.verify');
 Route::post('systems/new', 'SystemsController@create')->middleware('jwt.verify');
 Route::delete('system/{id}/delete', 'SystemsController@delete')->middleware('jwt.verify');
+Route::delete('system/{id}/note/{noteid}/delete', 'SystemsController@deleteNote')->middleware('jwt.verify');
 Route::put('system/{id}/update', 'SystemsController@update')->middleware('jwt.verify');
 
 Route::middleware('auth:api')
