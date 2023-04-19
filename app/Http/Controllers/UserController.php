@@ -2,7 +2,7 @@
 
     namespace App\Http\Controllers;
 
-    use App\User;
+    use App\Models\User;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Facades\Validator;
@@ -20,11 +20,25 @@
 
         }
 
+        // public function authenticate(Request $request)
+        // {
+        //     $credentials = $request->only('username', 'password');
+
+        //     $user = DB::table('ldeq_users')->where('username', $credentials['username'])->first();
+        //     if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        //         return response()->json(['error' => 'Invalid credentials'], 401);
+        //     }
+
+        //     $token = JWTAuth::fromUser($user);
+
+        //     return response()->json(compact('token'));
+        // }
+
         public function authenticate(Request $request) {
             $credentials = $request->only('username', 'password');
 
             try {
-                if (! $token = JWTAuth::attempt($credentials)) {
+                if (!$token = JWTAuth::attempt($credentials)) {
                     return response()->json(['error' => 'invalid_credentials'], 400);
                 }
             } catch (JWTException $e) {
